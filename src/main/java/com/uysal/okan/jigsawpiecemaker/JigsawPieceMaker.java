@@ -38,7 +38,6 @@ public class JigsawPieceMaker extends JPanel{
 		System.out.println("Working Directory = " + System.getProperty("user.dir"));
 		setJigsawImage(image);
 		setJigsawPieceCount(pieceCount);
-		SizePanel sizePanel = new SizePanel();
 		puzzleSize = new TemplateSizeImpl(this.pieceCount, new Template40());
 	}
 	
