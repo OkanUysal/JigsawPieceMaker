@@ -34,33 +34,17 @@ public class JigsawPieceMaker extends JPanel{
 	
 	private Random random = new Random();
 	
-	public JigsawPieceMaker(File image, int pieceCount) {
+	public JigsawPieceMaker(File file, int pieceCount) {
 		System.out.println("Working Directory = " + System.getProperty("user.dir"));
-		setJigsawImage(image);
-		setJigsawPieceCount(pieceCount);
-		puzzleSize = new TemplateSizeImpl(this.pieceCount, new Template40());
-	}
-	
-	public boolean setJigsawImage(File file) {
 		try {
 			if(file.exists()) {
 				this.image = ImageIO.read(file);
-				return true;
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return false;
-	}
-	
-	public int setJigsawPieceCount(int pieceCount) {
-		if( pieceCount < 4)
-			this.pieceCount = 4;
-		else if(pieceCount > 5000)
-			this.pieceCount = 5000;
-		else
-			this.pieceCount = pieceCount;
-		return this.pieceCount;
+		this.pieceCount = pieceCount;
+		puzzleSize = new TemplateSizeImpl(this.pieceCount, new Template40());
 	}
 	
 	public List<Piece> createPieces() throws IOException {
