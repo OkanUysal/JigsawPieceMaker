@@ -2,13 +2,16 @@ package com.uysal.okan.jigsawpiecemaker;
 
 import java.awt.AlphaComposite;
 import java.awt.Color;
+import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Polygon;
 import java.awt.Rectangle;
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -34,6 +37,8 @@ public class JigsawPieceMaker extends JPanel{
 	
 	private Random random = new Random();
 	
+	private List<Piece> pieceList;
+	
 	public JigsawPieceMaker(File file, int pieceCount) {
 		System.out.println("Working Directory = " + System.getProperty("user.dir"));
 		try {
@@ -48,7 +53,7 @@ public class JigsawPieceMaker extends JPanel{
 		puzzleSize = new TemplateSizeImpl(this.pieceCount, this.image);
 	}
 	
-	public List<Piece> createPieces() throws IOException {
+	public void createPieces() throws IOException {
         List<Piece> result = new ArrayList<Piece>();
 
         final int COUNT = puzzleSize.getCount();
@@ -178,7 +183,7 @@ public class JigsawPieceMaker extends JPanel{
                 piece.setBackground(COLORS[i % COLORS.length]);
             }
         }
-        return result;
+        pieceList = result;
     }
 	
 	private Polygon[][] createShapes(int X, int Y) {
@@ -393,6 +398,30 @@ public class JigsawPieceMaker extends JPanel{
 	        Color.GRAY,
 	        Color.CYAN,
 	        Color.ORANGE};
+	
+	public void writePieces(String path) throws IOException {
+		File f = new File(path);
+		if(!f.exists()) {
+			f.mkdirs();
+		} else if(!f.isDirectory()) {
+			return;
+		}
+		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(f, "piecedetails.txt")));
+        for(int i = 0; i < pieceList.size(); i++) {
+        	writer.write(pieceList.get(i).getName() + " " + pieceList.get(i).getDir() + " ");
+        	for(Piece neigbour : pieceList.get(i).getNeighbours()) {
+        		writer.write(neigbour.getName() + " ");
+        	}
+        	writer.write("\r\n");
+        	BufferedImage bi = new BufferedImage(pieceList.get(i).getSize().width, pieceList.get(i).getSize().height, BufferedImage.TYPE_INT_ARGB); 
+            Graphics g = bi.createGraphics();
+            pieceList.get(i).paint(g);  //this == JComponent
+            g.dispose();
+            try{ImageIO.write(bi,"png",new File(f, "test" + i + ".png"));}catch (Exception e) {e.printStackTrace();}
+        }
+        
+        writer.close();
+	}
 	
 	
 }
