@@ -44,7 +44,8 @@ public class JigsawPieceMaker extends JPanel{
 			e.printStackTrace();
 		}
 		this.pieceCount = pieceCount;
-		puzzleSize = new TemplateSizeImpl(this.pieceCount, new Template40());
+//		puzzleSize = new TemplateSizeImpl(this.pieceCount, new Template85());
+		puzzleSize = new TemplateSizeImpl(this.pieceCount, this.image);
 	}
 	
 	public List<Piece> createPieces() throws IOException {

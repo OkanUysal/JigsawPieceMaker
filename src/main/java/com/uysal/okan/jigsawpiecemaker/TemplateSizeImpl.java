@@ -1,5 +1,6 @@
 package com.uysal.okan.jigsawpiecemaker;
 
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -19,6 +20,26 @@ public class TemplateSizeImpl extends Size {
     TemplateSizeImpl(int count, Template template) {
         this.count = count;
         this.template = template;
+    }
+    
+    TemplateSizeImpl(int count, BufferedImage image) {
+        this.count = count;
+        
+        int area = image.getHeight() * image.getWidth();
+        int eachPieceArea = area / count;
+        int onePieceLength = (int) Math.sqrt(eachPieceArea);
+        if(onePieceLength <= 40)
+        	this.template = new Template40();
+        else if(onePieceLength <= 50)
+        	this.template = new Template50();
+        else if(onePieceLength <= 55)
+        	this.template = new Template55();
+        else if(onePieceLength <= 60)
+        	this.template = new Template60();
+        else if(onePieceLength <= 65)
+        	this.template = new Template65();
+        else
+        	this.template = new Template85();
     }
 
     @Override
